@@ -119,7 +119,19 @@
   }
   bind('min', 'min'); bind('max', 'max'); bind('total', 'total'); bind('per', 'perDraw');
   $('draw').addEventListener('click', draw);
-  $('reset').addEventListener('click', function () { state.rounds = []; showError(''); save(); render(); });
+  $('reset').addEventListener('click', function () { $('confirm').showModal(); });
+  $('no').addEventListener('click', function () { $('confirm').close(); });
+  $('yes').addEventListener('click', function () {
+    $('confirm').close();
+    state.rounds = []; showError(''); save(); render();
+  });
+  $('fs').addEventListener('click', function () {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  });
+  document.addEventListener('fullscreenchange', function () {
+    $('fs-t').textContent = document.fullscreenElement ? 'Sair da tela cheia' : 'Tela cheia';
+  });
   window.matchMedia('(min-width:1024px)').addEventListener('change', render);
   render();
 })();

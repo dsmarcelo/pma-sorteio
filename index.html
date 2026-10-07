@@ -13,10 +13,16 @@
   <header class="top">
     <div class="top-in">
       <img class="logo" src="logo.png" alt="Prefeitura de Anápolis — Sempre do seu lado">
-      <button type="button" class="btn btn-outline" id="reset">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"></path><polyline points="3 3 3 9 9 9"></polyline></svg>
-        <span>Reiniciar</span>
-      </button>
+      <div class="top-actions">
+        <button type="button" class="btn btn-outline" id="fs">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+          <span id="fs-t">Tela cheia</span>
+        </button>
+        <button type="button" class="btn btn-outline" id="reset">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"></path><polyline points="3 3 3 9 9 9"></polyline></svg>
+          <span>Reiniciar</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -75,6 +81,14 @@
     </div>
   </main>
 </div>
+<dialog id="confirm" class="dlg" aria-labelledby="confirm-t">
+  <h2 id="confirm-t">Reiniciar sorteio?</h2>
+  <p class="muted">Todos os números sorteados serão apagados. Tem certeza?</p>
+  <div class="dlg-actions">
+    <button type="button" class="btn btn-outline" id="no">Não</button>
+    <button type="button" class="btn btn-primary" id="yes">Sim</button>
+  </div>
+</dialog>
 <script src="app.js"></script>
 </body>
 </html>
