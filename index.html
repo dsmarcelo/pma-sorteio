@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sorteio de números</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <div class="top-in">
+      <img class="logo" src="logo.png" alt="Prefeitura de Anápolis — Sempre do seu lado">
+      <button type="button" class="btn btn-outline" id="reset">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"></path><polyline points="3 3 3 9 9 9"></polyline></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="main">
+    <h1 class="title">Sorteio de números</h1>
+
+    <section class="card opts" aria-label="Opções do sorteio">
+      <div class="field"><label for="min">Mínimo</label><input id="min" class="fld" type="number" inputmode="numeric"></div>
+      <div class="field"><label for="max">Máximo</label><input id="max" class="fld" type="number" inputmode="numeric"></div>
+      <div class="field"><label for="total">Quantidade a sortear</label><input id="total" class="fld" type="number" inputmode="numeric" min="1"></div>
+      <div class="field"><label for="per">Números por vez</label><input id="per" class="fld" type="number" inputmode="numeric" min="1"></div>
+    </section>
+
+    <div class="cols">
+      <section class="card result" aria-label="Resultado">
+        <div class="row-between">
+          <span class="eyebrow" id="stage"></span>
+          <span class="muted" id="range"></span>
+        </div>
+
+        <div class="stage-area">
+          <div class="balls" id="balls" aria-live="polite"></div>
+          <div class="empty" id="empty">
+            <div class="empty-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"></rect><circle cx="8.5" cy="8.5" r="1.2"></circle><circle cx="15.5" cy="15.5" r="1.2"></circle><circle cx="15.5" cy="8.5" r="1.2"></circle><circle cx="8.5" cy="15.5" r="1.2"></circle></svg></div>
+            <span class="empty-t">Nenhum número sorteado</span>
+            <span class="muted">Defina as opções acima e toque em Sortear para começar.</span>
+          </div>
+        </div>
+
+        <div class="prog">
+          <div class="row-between nums"><span class="fw5" id="count"></span><span class="muted" id="remaining"></span></div>
+          <div class="bar" role="progressbar" aria-label="Progresso do sorteio" id="bar" aria-valuemin="0"><div class="fill" id="fill"></div></div>
+        </div>
+
+        <div class="alert" id="alert" role="alert" hidden>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span id="alert-t"></span>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="draw">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+          <span id="draw-t"></span>
+        </button>
+      </section>
+
+      <aside class="card history" aria-label="Números sorteados">
+        <div class="h-head">
+          <div class="h-title"><h2>Números sorteados</h2><span class="small muted">Mais recentes primeiro</span></div>
+          <span class="badge" id="badge">0</span>
+        </div>
+        <div class="h-body">
+          <p class="h-empty muted" id="h-empty">A lista aparece aqui a cada sorteio.</p>
+          <ol id="list"></ol>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
