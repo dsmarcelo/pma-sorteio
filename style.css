@@ -84,7 +84,7 @@ label{font-weight:500}
 /* Desktop */
 @media (min-width:1024px){
   #fs{display:flex}
-  .cols{flex-direction:row;align-items:stretch;gap:24px}
+  .cols{flex-direction:row;align-items:flex-start;gap:24px}
   .result{flex:1 1 0;min-width:0;padding:32px;gap:32px;min-height:560px}
   .history{flex:0 0 400px;max-height:720px}
   .stage-area{min-height:240px}
