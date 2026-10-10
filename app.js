@@ -28,8 +28,7 @@
     if (total < 1 || per < 1) return showError('Quantidade a sortear e números por vez devem ser 1 ou mais.');
     var drawn = [].concat.apply([], state.rounds.map(function (r) { return r.nums; }));
     var left = total - drawn.length;
-    if (left <= 0) return showError('A quantidade definida já foi sorteada. Reinicie para um novo sorteio.');
-    var count = Math.min(per, left), range = max - min + 1;
+    var count = left > 0 ? Math.min(per, left) : per, range = max - min + 1;
     var rand = function () { return min + Math.floor(Math.random() * range); };
     var nums = [];
     var used = new Set(drawn);
@@ -79,14 +78,14 @@
     var remaining = Math.max(total - drawnCount, 0);
     var done = total > 0 && remaining === 0;
     $('count').textContent = drawnCount + ' de ' + total + ' sorteados';
-    $('remaining').textContent = done ? (wide ? 'Sorteio concluído' : 'Concluído') : plural(remaining, ' restante', ' restantes').replace(/^\d+ /, remaining + ' ');
+    $('remaining').textContent = done ? 'Meta atingida' : plural(remaining, ' restante', ' restantes').replace(/^\d+ /, remaining + ' ');
     $('bar').setAttribute('aria-valuemax', total);
-    $('bar').setAttribute('aria-valuenow', drawnCount);
+    $('bar').setAttribute('aria-valuenow', Math.min(drawnCount, Math.max(total, 0)));
     $('fill').style.width = (total > 0 ? Math.min(100, Math.round(drawnCount / total * 100)) : 0) + '%';
 
     var next = Math.min(per, remaining || per);
-    $('draw').disabled = done;
-    $('draw-t').textContent = done ? 'Sorteio concluído' : (next === 1 ? 'Sortear 1 número' : 'Sortear ' + next + ' números');
+    $('draw').disabled = false;
+    $('draw-t').textContent = next === 1 ? 'Sortear 1 número' : 'Sortear ' + next + ' números';
 
     $('badge').textContent = drawnCount;
     var list = $('list');
