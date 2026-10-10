@@ -14,6 +14,10 @@
     <div class="top-in">
       <img class="logo" src="logo.png" alt="Prefeitura de Anápolis — Sempre do seu lado">
       <div class="top-actions">
+        <button type="button" class="btn btn-outline" id="options-toggle" aria-expanded="true" aria-controls="options">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9.5 3-.5 3-2 1.2-2.8-1-2.5 4.3L4 12l-.1 2.3-2.2 1.9 2.5 4.3 2.8-1 2 1.2.5 3h5l.5-3 2-1.2 2.8 1 2.5-4.3-2.2-1.9L20 12l2.3-1.5-2.5-4.3-2.8 1L15 6l-.5-3Z" transform="translate(0 -1)"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          <span>Opções</span>
+        </button>
         <button type="button" class="btn btn-outline" id="fs">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
           <span id="fs-t">Tela cheia</span>
@@ -29,7 +33,7 @@
   <main class="main">
     <h1 class="title">Sorteio de números</h1>
 
-    <section class="card opts" aria-label="Opções do sorteio">
+    <section class="card opts" id="options" aria-label="Opções do sorteio">
       <div class="field"><label for="min">Mínimo</label><input id="min" class="fld" type="number" inputmode="numeric"></div>
       <div class="field"><label for="max">Máximo</label><input id="max" class="fld" type="number" inputmode="numeric"></div>
       <div class="field"><label for="total">Quantidade a sortear</label><input id="total" class="fld" type="number" inputmode="numeric" min="1"></div>

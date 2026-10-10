@@ -119,6 +119,11 @@
   }
   bind('min', 'min'); bind('max', 'max'); bind('total', 'total'); bind('per', 'perDraw');
   $('draw').addEventListener('click', draw);
+  $('options-toggle').addEventListener('click', function () {
+    var options = $('options');
+    options.hidden = !options.hidden;
+    $('options-toggle').setAttribute('aria-expanded', String(!options.hidden));
+  });
   $('reset').addEventListener('click', function () { $('confirm').showModal(); });
   $('no').addEventListener('click', function () { $('confirm').close(); });
   $('yes').addEventListener('click', function () {
