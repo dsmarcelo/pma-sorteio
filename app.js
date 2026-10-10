@@ -16,6 +16,15 @@
   function int(v) { var n = parseInt(v, 10); return isNaN(n) ? null : n; }
   function plural(n, a, b) { return n + (n === 1 ? a : b); }
 
+  function updateConfirmedCount() {
+    var count = state.rounds.reduce(function (sum, r) {
+      return sum + r.nums.filter(function (n) {
+        return Array.isArray(r.checked) && r.checked.indexOf(n) !== -1;
+      }).length;
+    }, 0);
+    $('confirmed-count').textContent = plural(count, ' número confirmado', ' números confirmados');
+  }
+
   function showError(msg) {
     $('alert').hidden = !msg;
     $('alert-t').textContent = msg || '';
@@ -88,6 +97,7 @@
     $('draw-t').textContent = next === 1 ? 'Sortear 1 número' : 'Sortear ' + next + ' números';
 
     $('badge').textContent = drawnCount;
+    updateConfirmedCount();
     var list = $('list');
     list.innerHTML = '';
     state.rounds.slice().reverse().forEach(function (r) {
@@ -100,9 +110,26 @@
       var chips = document.createElement('div');
       chips.className = 'chips';
       r.nums.forEach(function (n) {
-        var c = document.createElement('span');
+        var c = document.createElement('button');
+        c.type = 'button';
         c.className = 'chip';
-        c.textContent = fmt(n);
+        var checked = Array.isArray(r.checked) && r.checked.indexOf(n) !== -1;
+        c.classList.toggle('is-checked', checked);
+        c.setAttribute('aria-pressed', String(checked));
+        c.setAttribute('aria-label', 'Número ' + fmt(n));
+        c.innerHTML = '<span></span><svg class="chip-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4 10-10"></path></svg>';
+        c.firstChild.textContent = fmt(n);
+        c.addEventListener('click', function () {
+          if (!Array.isArray(r.checked)) r.checked = [];
+          var index = r.checked.indexOf(n);
+          if (index === -1) r.checked.push(n);
+          else r.checked.splice(index, 1);
+          var marked = index === -1;
+          c.classList.toggle('is-checked', marked);
+          c.setAttribute('aria-pressed', String(marked));
+          save();
+          updateConfirmedCount();
+        });
         chips.appendChild(c);
       });
       li.appendChild(head);
