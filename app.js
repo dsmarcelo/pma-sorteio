@@ -3,6 +3,7 @@
   var $ = function (id) { return document.getElementById(id); };
   var defaults = { min: '1', max: '100', total: '30', perDraw: '3', rounds: [] };
   var state = load();
+  var drawLocked = false;
 
   function load() {
     try {
@@ -15,6 +16,11 @@
 
   function int(v) { var n = parseInt(v, 10); return isNaN(n) ? null : n; }
   function plural(n, a, b) { return n + (n === 1 ? a : b); }
+  function formatNumber(n) {
+    var max = int(state.max);
+    var digits = max === null ? 1 : String(Math.abs(max)).length;
+    return (n < 0 ? '-' : '') + String(Math.abs(n)).padStart(digits, '0');
+  }
 
   function updateConfirmedCount() {
     var count = state.rounds.reduce(function (sum, r) {
@@ -23,11 +29,69 @@
       }).length;
     }, 0);
     $('confirmed-count').textContent = plural(count, ' número confirmado', ' números confirmados');
+    renderOverview();
+  }
+
+  function renderOverview() {
+    var groups = { unconfirmed: [], confirmed: [] };
+    state.rounds.forEach(function (r) {
+      r.nums.forEach(function (n) {
+        var checked = Array.isArray(r.checked) && r.checked.indexOf(n) !== -1;
+        groups[checked ? 'confirmed' : 'unconfirmed'].push(n);
+      });
+    });
+    Object.keys(groups).forEach(function (group) {
+      var nums = groups[group].sort(function (a, b) { return a - b; });
+      var list = $(group + '-numbers');
+      list.innerHTML = '';
+      nums.forEach(function (n) {
+        var item = document.createElement('li');
+        item.textContent = formatNumber(n);
+        list.appendChild(item);
+      });
+      $(group + '-total').textContent = nums.length;
+      $(group + '-empty').hidden = nums.length > 0;
+    });
+    fitOverview();
+  }
+
+  function fitOverview() {
+    if (!$('overview').open) return;
+    ['unconfirmed', 'confirmed'].forEach(function (group) {
+      var list = $(group + '-numbers');
+      var low = 8, high = 32;
+      while (high - low > 0.5) {
+        var size = (low + high) / 2;
+        list.style.setProperty('--number-size', size + 'px');
+        if (list.scrollHeight > list.clientHeight || list.scrollWidth > list.clientWidth) high = size;
+        else low = size;
+      }
+      list.style.setProperty('--number-size', low + 'px');
+    });
   }
 
   function showError(msg) {
     $('alert').hidden = !msg;
     $('alert-t').textContent = msg || '';
+  }
+
+  function downloadCsv() {
+    var rows = ['Número,Confirmação'];
+    state.rounds.slice().reverse().forEach(function (r) {
+      r.nums.forEach(function (n) {
+        var checked = Array.isArray(r.checked) && r.checked.indexOf(n) !== -1;
+        rows.push(n + ',' + (checked ? 'confirmado' : 'não confirmado'));
+      });
+    });
+    var blob = new Blob(['\uFEFF' + rows.join('\r\n') + '\r\n'], { type: 'text/csv;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'numeros-sorteados.csv';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
 
   function draw() {
@@ -59,7 +123,7 @@
   function render() {
     var min = int(state.min), max = int(state.max);
     var total = int(state.total) || 0, per = int(state.perDraw) || 1;
-    var fmt = String;
+    var fmt = formatNumber;
     var drawnCount = state.rounds.reduce(function (a, r) { return a + r.nums.length; }, 0);
     var last = state.rounds[state.rounds.length - 1];
     var wide = window.matchMedia('(min-width:1024px)').matches;
@@ -93,10 +157,11 @@
     $('fill').style.width = (total > 0 ? Math.min(100, Math.round(drawnCount / total * 100)) : 0) + '%';
 
     var next = Math.min(per, remaining || per);
-    $('draw').disabled = false;
+    $('draw').disabled = drawLocked;
     $('draw-t').textContent = next === 1 ? 'Sortear 1 número' : 'Sortear ' + next + ' números';
 
     $('badge').textContent = drawnCount;
+    $('download').disabled = drawnCount === 0;
     updateConfirmedCount();
     var list = $('list');
     list.innerHTML = '';
@@ -144,7 +209,19 @@
     el.addEventListener('input', function () { state[key] = el.value; showError(''); save(); render(); });
   }
   bind('min', 'min'); bind('max', 'max'); bind('total', 'total'); bind('per', 'perDraw');
-  $('draw').addEventListener('click', draw);
+  $('draw').addEventListener('click', function () {
+    if (drawLocked) return;
+    drawLocked = true;
+    $('draw').disabled = true;
+    setTimeout(function () {
+      drawLocked = false;
+      $('draw').disabled = false;
+    }, 200);
+    draw();
+  });
+  $('download').addEventListener('click', downloadCsv);
+  $('overview-toggle').addEventListener('click', function () { $('overview').showModal(); fitOverview(); });
+  $('overview-close').addEventListener('click', function () { $('overview').close(); });
   $('options-toggle').addEventListener('click', function () {
     var options = $('options');
     options.hidden = !options.hidden;
@@ -164,5 +241,6 @@
     $('fs-t').textContent = document.fullscreenElement ? 'Sair da tela cheia' : 'Tela cheia';
   });
   window.matchMedia('(min-width:1024px)').addEventListener('change', render);
+  window.addEventListener('resize', fitOverview);
   render();
 })();

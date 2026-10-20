@@ -61,6 +61,20 @@ label{font-weight:500}
 .h-title{display:flex;flex-direction:column;gap:2px}
 .h-title h2{margin:0;font-size:18px;line-height:24px;font-weight:600}
 .confirmed-count{color:#14532D;font-weight:600}
+.overview-toggle{margin:8px 0;height:40px;font-size:13px;padding:0 14px;align-self:flex-start}
+.dlg.overview{width:100vw;max-width:none;height:100dvh;max-height:none;margin:0;padding:16px;border-radius:0;overflow:hidden}
+.overview[open]{display:flex;flex-direction:column}
+.overview > p{margin:0 0 12px}
+.overview-head{margin-bottom:12px}
+.overview-head h2{margin:0}
+.overview-groups{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(2,minmax(0,1fr));gap:12px;flex:1;min-height:0}
+.overview-group{padding:12px;border:1px solid var(--bd);border-radius:16px;min-width:0;min-height:0;display:flex;flex-direction:column}
+.overview-group h3{margin:0;font-size:16px;line-height:24px}
+.overview-numbers{--number-size:24px;list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;align-content:flex-start;gap:.25em;font-size:var(--number-size);flex:1;min-height:0;overflow:auto}
+.overview-numbers li{padding:.2em .4em;border-radius:.3em;background:var(--bg);font-size:inherit;line-height:1.2;font-weight:600;font-variant-numeric:tabular-nums;text-align:center;overflow-wrap:anywhere;max-width:100%}
+.overview-confirmed .overview-numbers li,.overview-confirmed .badge{background:#DCFCE7;color:#14532D}
+.overview .overview-empty{margin:16px 0 0}
+@media (min-width:640px){.overview-groups{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:minmax(0,1fr)}}
 .badge{min-width:32px;height:24px;padding:0 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
 .h-body{overflow-y:auto;flex-grow:1}
 .h-empty{margin:0;padding:32px 20px;text-align:center}
